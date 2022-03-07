@@ -12,8 +12,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           primarySwatch: generateMaterialColor(const Color(0xffFF1A1A)),
           scaffoldBackgroundColor: Colors.white,
-      fontFamily: 'Montserrat'),
-      home: HomeScreen.providerInstance(),
+          fontFamily: 'Montserrat'),
+      home: HomeScreen(),
     );
   }
 }

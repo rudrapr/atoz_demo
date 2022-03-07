@@ -488,21 +488,28 @@ class Features {
 class Name {
   int? docCountErrorUpperBound;
   int? sumOtherDocCount;
-  List<String>? buckets;
+  List<Buckets>? buckets;
 
   Name({this.docCountErrorUpperBound, this.sumOtherDocCount, this.buckets});
 
   Name.fromJson(Map<String, dynamic> json) {
     docCountErrorUpperBound = json['doc_count_error_upper_bound'];
     sumOtherDocCount = json['sum_other_doc_count'];
-    buckets = json['buckets'].cast<String>();
+    if (json['buckets'] != null) {
+      buckets = <Buckets>[];
+      json['buckets'].forEach((v) {
+        buckets!.add(new Buckets.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['doc_count_error_upper_bound'] = this.docCountErrorUpperBound;
     data['sum_other_doc_count'] = this.sumOtherDocCount;
-    data['buckets'] = this.buckets;
+    if (this.buckets != null) {
+      data['buckets'] = this.buckets!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }

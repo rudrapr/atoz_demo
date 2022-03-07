@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lrnr_demo/home/home_bloc/home_bloc.dart';
+import 'package:lrnr_demo/home/view/filter_dialog.dart';
 import 'package:lrnr_demo/home/widgets/categories_item.dart';
 import 'package:lrnr_demo/home/widgets/listing_item.dart';
 import 'package:lrnr_demo/util/color_util.dart';
@@ -8,13 +9,6 @@ import 'package:lrnr_demo/util/console.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
-
-  static Widget providerInstance() {
-    return BlocProvider(
-      create: (context) => HomeBloc()..add(HomeInit()),
-      child: const HomeScreen(),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +53,9 @@ class HomeScreen extends StatelessWidget {
                         children: [
                           Expanded(
                               child: TextButton.icon(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    FilterDialog.show(context);
+                                  },
                                   icon: Icon(Icons.filter_alt_outlined),
                                   label: Text('Filter'))),
                           VerticalDivider(
@@ -89,8 +85,10 @@ class HomeScreen extends StatelessWidget {
           listener: (context, state) {
             // TODO: implement listener
             if (state is HomeSuccess) {
-              Console.log(state.categoriesModel);
-              Console.log(state.listingModel);
+              if (state.message != null) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text(state.message!)));
+              }
             } else if (state is HomeFailure) {
               ScaffoldMessenger.of(context)
                   .showSnackBar(SnackBar(content: Text(state.message)));
